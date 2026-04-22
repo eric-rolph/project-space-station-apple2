@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Project: Space Station — Apple IIe Emulator</title>
   <meta name="description" content="Play the classic 1985 Apple IIe simulation game Project: Space Station by Lawrence Holland (HESware) in your browser." />
   <meta name="theme-color" content="#0a0e1a" />
@@ -36,7 +39,7 @@
           <iframe id="emulator-frame" title="Apple IIe Emulator" allowfullscreen
             allow="autoplay; gamepad; keyboard-map"
             style="display:none; width:100%; height:100%; border:none; border-radius:8px;"
-            sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+            sandbox="allow-scripts allow-same-origin allow-popups allow-downloads"></iframe>
           <!-- Loading overlay -->
           <div id="loading-overlay">
             <div class="loader-ring"></div>
@@ -61,9 +64,16 @@
         <button id="btn-side-b" class="ctrl-btn" style="color: #55ff55; border-color: #55ff55;" title="Insert Side B">
           <span class="btn-icon">💾</span> SIDE B
         </button>
+        <button id="btn-save" class="ctrl-btn" title="Save Game State">
+          <span class="btn-icon">⬇️</span> SAVE GAME
+        </button>
+        <button id="btn-load" class="ctrl-btn" title="Load Game State">
+          <span class="btn-icon">⬆️</span> LOAD GAME
+        </button>
         <button id="btn-fullscreen" class="ctrl-btn" title="Fullscreen">
           <span class="btn-icon">⛶</span> FULL
         </button>
+        <input type="file" id="load-file-input" accept=".a2ts" style="display:none">
       </div>
       <div class="control-group">
         <label class="speed-label" for="speed-select">SPEED</label>
@@ -97,14 +107,15 @@
           while dealing with emergencies.
         </p>
         <p class="info-note">
-          <span style="color: #55ff55;">💾</span> When prompted, click <strong>SIDE B</strong> above, then press Enter!
+          <span style="color: #55ff55;">💾</span> When prompted, click <strong>SIDE B</strong> above, then press Enter or Space!
         </p>
       </div>
       <div class="info-card">
         <h2>Controls</h2>
         <div class="key-grid">
-          <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd><span>Arrow keys / Joystick</span>
-          <kbd>Enter</kbd><span></span><span></span><span></span><span>Confirm / Fire</span>
+          <kbd>A</kbd><kbd>Z</kbd><span></span><span></span><span>Up / Down</span>
+          <kbd>←</kbd><kbd>→</kbd><span></span><span></span><span>Left / Right</span>
+          <kbd>Enter</kbd><kbd>Space</kbd><span></span><span></span><span>Confirm / Fire</span>
           <kbd>Esc</kbd><span></span><span></span><span></span><span>Cancel / Menu</span>
           <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>R</kbd><span></span><span>Reset Apple IIe</span>
         </div>
@@ -114,10 +125,10 @@
     <!-- ── Footer ────────────────────────────────────── -->
     <footer id="site-footer">
       <p>
-        Emulated with ♥ using
-        <a href="https://apple2ts.com" target="_blank" rel="noopener">Apple2TS</a>
+        Emulated using
+        <a href="https://github.com/chris-torrence/apple2ts" target="_blank" rel="noopener">Apple2TS</a>
         · Hosted on <a href="https://workers.cloudflare.com" target="_blank" rel="noopener">Cloudflare Workers</a>
-        · Preserved by <a href="https://archive.org/details/ProjectSpaceStation4amCrack" target="_blank" rel="noopener">4am / Internet Archive</a>
+        · Preserved by <a href="https://archive.org" target="_blank" rel="noopener">Internet Archive</a>
       </p>
     </footer>
   </div>

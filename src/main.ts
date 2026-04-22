@@ -44,8 +44,7 @@ function setStatus(msg: string) {
 function getEmulatorURL(color = 'color', speed = 'normal'): string {
   // The disk images are served from our own Cloudflare Worker.
   const origin = window.location.origin;
-  // Use our pipe-separated multi-disk syntax added to Apple2TS
-  const diskURL = `${origin}/disks/pss_side_a.dsk|${origin}/disks/pss_side_b.dsk`;
+  const diskURL = `${origin}/disks/pss_side_a.dsk`;
   
   const params = new URLSearchParams({
     machine: 'apple2ee',
@@ -127,6 +126,40 @@ async function boot() {
         setStatus('Side B Inserted');
         led.classList.add('active');
         setTimeout(() => led.classList.remove('active'), 500);
+      }
+    });
+
+    document.getElementById('btn-save')?.addEventListener('click', () => {
+      if (emulatorFrame.contentWindow) {
+        emulatorFrame.contentWindow.postMessage({ type: 'saveState' }, window.location.origin);
+        setStatus('Saving Game State...');
+        led.classList.add('active');
+        setTimeout(() => led.classList.remove('active'), 500);
+      }
+    });
+
+    const fileInput = document.getElementById('load-file-input') as HTMLInputElement;
+    document.getElementById('btn-load')?.addEventListener('click', () => {
+      fileInput?.click();
+    });
+
+    fileInput?.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file && emulatorFrame.contentWindow) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const buffer = event.target?.result as ArrayBuffer;
+          const dataArray = Array.from(new Uint8Array(buffer));
+          emulatorFrame.contentWindow!.postMessage({
+            type: 'loadState',
+            filename: file.name,
+            data: dataArray
+          }, window.location.origin);
+          setStatus('Game State Loaded');
+          led.classList.add('active');
+          setTimeout(() => led.classList.remove('active'), 500);
+        };
+        reader.readAsArrayBuffer(file);
       }
     });
 
