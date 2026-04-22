@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════════
+#  Project: Space Station — CI/CD Pipeline
+#  Build the Vite frontend + deploy to Cloudflare Workers
+# ═══════════════════════════════════════════════════════════════
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:          # Allow manual runs from the Actions tab
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node.js ───────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # ── Install ───────────────────────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Build ─────────────────────────────────────────────────
+      - name: Build production bundle
+        run: npm run build
+
+      # ── Deploy ────────────────────────────────────────────────
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+  # ── Phase 2 placeholder: Emscripten WASM build ──────────────
+  # Uncomment when the C/C++ Apple IIe core is ready
+  #
+  # build-wasm:
+  #   name: Compile C Emulator → WASM
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: emscripten/emsdk:3.1.56
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Compile with Emscripten
+  #       run: |
+  #         cd emulator-core
+  #         emcc -O3 -s WASM=1 \
+  #              -s EXPORTED_FUNCTIONS='["_cpu_reset","_cpu_tick","_get_framebuffer","_load_disk"]' \
+  #              -s EXPORTED_RUNTIME_METHODS='["cwrap","ccall"]' \
+  #              -s INITIAL_MEMORY=8388608 \
+  #              -s MAXIMUM_MEMORY=16777216 \
+  #              -s ALLOW_MEMORY_GROWTH=1 \
+  #              --preload-file ../public/disks/pss_side_a.dsk@/disks/side_a.dsk \
+  #              --preload-file ../public/disks/pss_side_b.dsk@/disks/side_b.dsk \
+  #              cpu6502.c apple2e.c disk_ii.c video.c main.c \
+  #              -o ../public/emulator.js
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: wasm-build
+  #         path: public/emulator.*

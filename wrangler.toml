@@ -1,0 +1,25 @@
+# ──────────────────────────────────────────────────────────────
+#  Project: Space Station — Cloudflare Worker Config
+#  Serves the static Vite build (HTML + JS + WASM + .dsk assets)
+# ──────────────────────────────────────────────────────────────
+
+name = "project-space-station"
+compatibility_date = "2026-04-15"
+compatibility_flags = ["nodejs_compat"]
+
+# The Worker entry point (thin shim — most work is static assets)
+main = "worker/index.ts"
+
+# Serve the Vite build output as static assets
+[assets]
+directory = "dist"
+binding    = "ASSETS"
+
+# Observability
+[observability]
+enabled = true
+
+# ── Optional: custom domain ──────────────────────────────────
+# [[routes]]
+# pattern     = "spacestation.yourdomain.com"
+# custom_domain = true

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project: Space Station — Apple IIe Emulator</title>
+  <meta name="description" content="Play the classic 1985 Apple IIe simulation game Project: Space Station by Lawrence Holland (HESware) in your browser." />
+  <meta name="theme-color" content="#0a0e1a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- ═══ Starfield background ═══ -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
+  <!-- ═══ Main container ═══ -->
+  <div id="app">
+    <!-- ── Header ────────────────────────────────────── -->
+    <header id="site-header">
+      <div class="header-glow"></div>
+      <h1 id="title">
+        <span class="title-prefix">PROJECT:</span>
+        <span class="title-main">SPACE STATION</span>
+      </h1>
+      <p class="subtitle">Apple IIe &middot; HESware &middot; 1985 &middot; Lawrence Holland</p>
+    </header>
+
+    <!-- ── CRT Monitor ───────────────────────────────── -->
+    <main id="monitor">
+      <div class="monitor-bezel">
+        <div class="monitor-inner">
+          <div class="scanlines" aria-hidden="true"></div>
+          <div class="crt-flicker" aria-hidden="true"></div>
+          <canvas id="screen" width="560" height="384"></canvas>
+          <!-- Loading overlay -->
+          <div id="loading-overlay">
+            <div class="loader-ring"></div>
+            <p class="loader-text">BOOTING APPLE IIe…</p>
+            <p class="loader-sub" id="load-status">Loading ROM…</p>
+          </div>
+        </div>
+        <div class="monitor-label">
+          <span class="led" id="drive-led"></span>
+          <span class="drive-label">DISK II</span>
+          <span class="model-label">Apple //e</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- ── Controls ──────────────────────────────────── -->
+    <section id="controls" aria-label="Emulator Controls">
+      <div class="control-group">
+        <button id="btn-reset" class="ctrl-btn" title="Reset (Ctrl+Shift+R)">
+          <span class="btn-icon">⟲</span> RESET
+        </button>
+        <button id="btn-pause" class="ctrl-btn" title="Pause/Resume">
+          <span class="btn-icon">⏸</span> PAUSE
+        </button>
+        <button id="btn-fullscreen" class="ctrl-btn" title="Fullscreen">
+          <span class="btn-icon">⛶</span> FULL
+        </button>
+      </div>
+      <div class="control-group">
+        <label class="speed-label" for="speed-select">SPEED</label>
+        <select id="speed-select" class="ctrl-select">
+          <option value="1">1 MHz (authentic)</option>
+          <option value="2">2× Fast</option>
+          <option value="4">4× Turbo</option>
+          <option value="0">Unlimited</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="speed-label" for="color-select">DISPLAY</label>
+        <select id="color-select" class="ctrl-select">
+          <option value="color">Color</option>
+          <option value="green">Green Phosphor</option>
+          <option value="amber">Amber Phosphor</option>
+          <option value="white">White</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- ── Info panel ────────────────────────────────── -->
+    <section id="info-panel" aria-label="Game Information">
+      <div class="info-card">
+        <h2>About This Game</h2>
+        <p>
+          <strong>Project: Space Station</strong> is a space station construction simulation
+          designed by <em>Lawrence Holland</em> and published by <em>HESware</em> in 1985.
+          You are the mission commander responsible for assembling a modular space station
+          in orbit, managing resources, crew assignments, and keeping everything running
+          while dealing with emergencies.
+        </p>
+        <p class="info-note">
+          💾 Both disk sides are pre-loaded — no need to swap floppies!
+        </p>
+      </div>
+      <div class="info-card">
+        <h2>Controls</h2>
+        <div class="key-grid">
+          <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd><span>Arrow keys / Joystick</span>
+          <kbd>Enter</kbd><span></span><span></span><span></span><span>Confirm / Fire</span>
+          <kbd>Esc</kbd><span></span><span></span><span></span><span>Cancel / Menu</span>
+          <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>R</kbd><span></span><span>Reset Apple IIe</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ────────────────────────────────────── -->
+    <footer id="site-footer">
+      <p>
+        Emulated with ♥ on
+        <a href="https://workers.cloudflare.com" target="_blank" rel="noopener">Cloudflare Workers</a>
+        · Preserved by <a href="https://archive.org/details/ProjectSpaceStation4amCrack" target="_blank" rel="noopener">4am / Internet Archive</a>
+      </p>
+    </footer>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
