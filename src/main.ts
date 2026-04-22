@@ -112,6 +112,24 @@ async function boot() {
       setTimeout(() => led.classList.remove('active'), 2000);
     });
 
+    document.getElementById('btn-side-b')?.addEventListener('click', () => {
+      const origin = window.location.origin;
+      const diskURL = `${origin}/disks/pss_side_b.dsk`;
+      
+      // Send message to our local apple2ts emulator to mount disk into Drive 1 (index 0)
+      if (emulatorFrame.contentWindow) {
+        emulatorFrame.contentWindow.postMessage({
+          type: 'mountDiskFromUrl',
+          url: diskURL,
+          driveIndex: 0
+        }, origin);
+        
+        setStatus('Side B Inserted');
+        led.classList.add('active');
+        setTimeout(() => led.classList.remove('active'), 500);
+      }
+    });
+
     document.getElementById('btn-fullscreen')?.addEventListener('click', () => {
       const monitor = document.querySelector('.monitor-inner') as HTMLElement;
       if (document.fullscreenElement) {
